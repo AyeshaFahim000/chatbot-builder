@@ -25,8 +25,66 @@ const loginUser = async (req, res) => {
   }
 };
 
+const getUserProfile = async (req, res) => {
+  try {
+    const user = await userService.getUserProfile(req.user.id);
 
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({
+      error: error.message,
+    });
+  }
+};
 
+const getUserById = async (req, res) => {
+  try {
+    const user = await userService.getUserById(req.params.id);
 
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({
+      error: error.message,
+    });
+  }
+};
 
-export { registerUser, loginUser};
+const updateUserProfile = async (req, res) => {
+  try {
+    const { name, companyName, email } = req.body;
+
+    const user = await userService.updateUserProfile(
+      req.user.id,
+      name,
+      companyName,
+      email,
+    );
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({
+      error: error.message,
+    });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const result = await userService.deleteUser(req.params.id);
+
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(404).json({
+      error: error.message,
+    });
+  }
+};
+
+export {
+  registerUser,
+  loginUser,
+  getUserProfile,
+  getUserById,
+  updateUserProfile,
+  deleteUser,
+};

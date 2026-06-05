@@ -34,4 +34,52 @@ export const loginUser = async (email, password) => {
   return { user, token };
 };
 
+export const getUserById = async (id) => {
+  const user = await User.findById(id).select("-password");
 
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+};
+
+export const getUserProfile = async (userId) => {
+  const user = await User.findById(userId).select("-password");
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
+};
+
+export const updateUserProfile = async (userId, name, companyName, email) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  user.name = name || user.name;
+  user.companyName = companyName || user.companyName;
+  user.email = email || user.email;
+
+  await user.save();
+
+  return user;
+};
+
+export const deleteUser = async (id) => {
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  await User.findByIdAndDelete(id);
+
+  return {
+    message: "User deleted successfully",
+  };
+};
